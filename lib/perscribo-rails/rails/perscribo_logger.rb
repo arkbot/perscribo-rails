@@ -1,6 +1,6 @@
 require 'perscribo/logger'
 
-ENV['RAKE_ENV'] ||= 'development'
+ENV['RACK_ENV'] ||= 'development'
 
 module Perscribo
   class PerscriboLogger < ::Perscribo::Logger
@@ -9,6 +9,7 @@ module Perscribo
     def initialize(*args)
       super(*args)
       @endpoints = []
+      self.level = ::Logger::DEBUG
     end
 
     def add(*args)
@@ -21,10 +22,12 @@ module Perscribo
     isolate_namespace Perscribo
 
     config.after_initialize do
-      original_logger = Rails.logger
-      path = "#{Rails.root}/tmp/perscribo_rails_#{ENV['RAKE_ENV']}.log"
-      Rails.logger = PerscriboLogger.new(path)
-      Rails.logger.endpoints << original_logger
+      path = "#{Rails.root}/tmp/perscribo_rails_#{ENV['RACK_ENV']}.log"
+      perscribo_logger = PerscriboLogger.new(path)
+      [Rails.logger, ActionController::Base.logger].each do |i|
+        perscribo_logger.endpoints << i
+      end
+      Rails.logger = ActionController::Base.logger = perscribo_logger
     end
   end
 end
