@@ -24,9 +24,7 @@ module Perscribo
     config.after_initialize do
       path = "#{Rails.root}/tmp/perscribo_rails_#{ENV['RACK_ENV']}.log"
       perscribo_logger = PerscriboLogger.new(path)
-      [Rails.logger, ActionController::Base.logger].each do |i|
-        perscribo_logger.endpoints << i
-      end
+      perscribo_logger.endpoints << Rails.logger
       Rails.logger = ActionController::Base.logger = perscribo_logger
     end
   end
