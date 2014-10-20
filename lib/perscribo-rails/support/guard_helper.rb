@@ -5,6 +5,7 @@ DEFAULT_RAILS_OPTS = {
   environment: 'development',
   force_run: true,
   port: 3000,
+  timeout: 5,
   start_on_start: true
 }
 RAILS_WATCHER_OPTS = { truncate_on_read: true }
