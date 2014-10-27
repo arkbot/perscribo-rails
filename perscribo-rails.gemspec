@@ -2,14 +2,14 @@
 
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'perscribo-rails/version'
+require 'perscribo/rails/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'perscribo-rails'
-  spec.version       = PerscriboRails::VERSION
+  spec.version       = Perscribo::Rails::VERSION
   spec.authors       = ['Adam Eberlin']
   spec.email         = ['ae@adameberlin.com']
-  spec.summary       = 'Guard+Perscribo+RAILS support.'
+  spec.summary       = 'Perscribo support for Rails.'
   spec.description   = spec.summary
   spec.homepage      = 'https://github.com/arkbot/perscribo-rails'
   spec.license       = 'MIT'
@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.0.0'
 
   spec.add_development_dependency 'bundler', '~> 1.7'
-  spec.add_development_dependency 'guard', '~> 2.6.1'
+  spec.add_development_dependency 'guard'
   spec.add_development_dependency 'guard-cucumber'
   spec.add_development_dependency 'guard-rspec'
   spec.add_development_dependency 'guard-rubocop'
@@ -32,8 +32,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'terminal-notifier-guard'
 
-  spec.add_dependency 'activesupport', '~> 4.1.6'
+  spec.add_dependency 'activesupport'
   spec.add_dependency 'rails', '~> 4.1.6'
 
-  spec.add_runtime_dependency 'perscribo'
+  spec.add_dependency 'perscribo'
 end
