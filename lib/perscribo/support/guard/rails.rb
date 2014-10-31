@@ -8,7 +8,7 @@ module Perscribo
         DEFAULTS = {
           labels: [:debug, :info, :warn, :error, :fatal, :unknown],
           guard_opts: {
-            daemon: true,
+            daemon: false,
             # debug: true,
             environment: "#{ENV['RACK_ENV']}",
             force_run: true,
@@ -16,6 +16,18 @@ module Perscribo
             timeout: 5,
             start_on_start: true
           },
+          path: OUT_PATH,
+          watcher_opts: { rewind_on_touch: false }
+        }
+
+        ::Perscribo::Guard.capture!(self)
+      end
+
+      module Asset
+        OUT_PATH = "#{Dir.pwd}/tmp/perscribo_asset_#{ENV['RACK_ENV']}.log"
+        DEFAULTS = {
+          labels: [:debug, :info, :warn, :error, :fatal, :unknown],
+          guard_opts: { },
           path: OUT_PATH,
           watcher_opts: { rewind_on_touch: false }
         }

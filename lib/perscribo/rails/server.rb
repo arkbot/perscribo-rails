@@ -5,32 +5,27 @@ require 'rails/commands/server'
 
 module Perscribo
   module Rails
-    # class Server < ::Rails::Server
-    #   def print_boot_information
-    #     # ...
-    #     super
-    #   end
-    # end
     unless const_defined?(:Server, false)
       module Server
+        include Support::Core::Dsl::Bootstrappable
+
         module Bootstraps
           module PrependMethods
+            # TODO: use io#stdio in `ensure`
             def print_boot_information
-              root, opts = lambda { ::Rails.root }.call, [:rails, :info, root]
-              original_stdout, original_stderr = $stdout, $stderr
+              opts = [:rails, :info, lambda { "#{::Rails.root}/tmp" }.call]
               begin
-                $stdout = Support::Core::IO::LoggerIO.hook!($stdout, *opts)
-                $stderr = Support::Core::IO::LoggerIO.hook!($stderr, *opts)
+                logio = ::Perscribo::Support::Core::LoggerIO
+                $stdout = logio.hook!($stdout, *opts)
+                $stderr = logio.hook!($stderr, *opts)
                 super
               ensure
-                $stdout, $stderr = original_stdout, original_stderr
+                $stdout, $stderr = $stdout.stdio, $stderr.stdio
               end
             end
           end
         end
 
-        # TODO: May be able bootstrap! inside engine.
-        include Support::Core::Dsl::Bootstrappable
         bootstrap!(::Rails::Server)
       end
     end
